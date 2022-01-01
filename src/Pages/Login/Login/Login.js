@@ -1,17 +1,19 @@
 import { Box, Button, Container, CssBaseline, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import useFirebase from '../../../hooks/useFirebase';
 import login_img from '../../../Images/login_img.jpg'
 const Login = () => {
     const [role, setRole] = React.useState('');
     const [loginData, setLoginData] = React.useState({ email: "", password: "" })
+    const { loginUser } = useFirebase()
 
     //handle from submit
     const handleFormSubmit = (e) => {
         const addData = { ...loginData };
         addData.role = role;
         setLoginData(addData)
-        console.log(loginData)
+        loginUser(loginData.email, loginData.password)
         e.preventDefault();
     }
 
@@ -21,20 +23,19 @@ const Login = () => {
         const value = e.target.value;
         const newValue = { ...loginData, [name]: value };
         setLoginData(newValue);
-        console.log(newValue);
 
     }
 
     //handle role
     const handleChange = (event) => {
         setRole(event.target.value);
-        console.log(event.target.value)
     };
     return (
         <React.Fragment>
             <CssBaseline />
             <Container fixed>
                 <Box sx={{ bgcolor: '#cfe8fc', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', boxShadow: 3 }}>
+                    <Box sx={{ textAlign: 'center', my: 4, typography: 'body1', fontWeight: 'bold', fontSize: 'h6.fontSize' }}>{"Please SignIn"}</Box>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={6}>
                             <img src={login_img} style={{ width: "90%" }} alt="login_ing" />
@@ -60,6 +61,7 @@ const Login = () => {
                                     required
                                     margin="normal"
                                     sx={{ width: '75%' }}
+                                    type="password"
                                     id="password"
                                     label="Password"
                                     name="password"
